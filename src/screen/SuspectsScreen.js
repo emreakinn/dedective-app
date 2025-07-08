@@ -1,9 +1,20 @@
 import React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import images from '../assets/charactersImages';
 
 export default function SuspectsScreen({ route, navigation }) {
     const { selectedGame } = route.params;
     const suspects = selectedGame.characters;
+
+    function getImageSource(image) {
+        if (image.startsWith('http')) {
+            return { uri: image };
+        } else if (images[image]) {
+            return images[image];
+        } else {
+            return images['/profil.jpg']; // veya başka bir default resim
+        }
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -11,7 +22,7 @@ export default function SuspectsScreen({ route, navigation }) {
             <Text style={styles.header}>ŞÜPHELİLER</Text>
             {suspects.map((suspect) => (
                 <View key={suspect.id} style={styles.card}>
-                    <Image source={{ uri: suspect.image }} style={styles.image} />
+                    <Image source={getImageSource(suspect.image)} style={styles.image} />
                     <Text style={styles.name}>{suspect.name}</Text>
                     <Text style={styles.role}>{suspect.role}</Text>
                     <Text style={styles.notes}>{suspect.notes}</Text>

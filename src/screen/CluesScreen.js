@@ -1,9 +1,21 @@
 import React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import images from '../assets/cluesImages';
+
 
 export default function CluesScreen({ route, navigation }) {
     const { selectedGame } = route.params;
     const clues = selectedGame.clues;
+
+    function getImageSource(image) {
+        if (image.startsWith('http')) {
+            return { uri: image };
+        } else if (images[image]) {
+            return images[image];
+        } else {
+            return images['/icon.png']; // veya başka bir default resim
+        }
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -11,7 +23,7 @@ export default function CluesScreen({ route, navigation }) {
             <Text style={styles.header}>İPUÇLARI</Text>
             {clues.map((clue) => (
                 <View key={clue.id} style={styles.card}>
-                    <Image source={{ uri: clue.image }} style={styles.image} />
+                    <Image source={getImageSource(clue.image)} style={styles.image} />
                     <Text style={styles.name}>{clue.title}</Text>
                     <Text style={styles.content}>{clue.content}</Text>
                 </View>
